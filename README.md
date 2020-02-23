@@ -62,3 +62,46 @@ return Array.prototype.slice.call(arrayLikeObject);
   NoSQL 数据库
   JavaScript被广泛使用，好处：JavaScript相关的文档和各式各样的支持、JavaScript开发人员需求量大。
   JavaScript有一个光明的未来：语言是稳步发展的、有许多JavaScript相关的创新、JavaScript的网络平台是一个必须的组成部分，正在迅速成熟、JavaScript是被联盟广泛支持的，而不是被单独的人或公司控制。
+  
+  
+  
+  《你不知道的JavaScript》
+  第一章  类型
+  七种内置类型：空值、未定义、布尔值、数字、字符串、对象、符号
+  使用typeof运算符查看值的类型，JavaScript中的变量时没有类型的，只有值才有。变量在未持有值的时候为undefined，此时typeof返回undefined。
+  JavaScript有七种内置类型：null   undefined  boolean   number  string  object  symbol 
+  第二章 值
+  数组  数组可以容纳任何类型的值，使用delete可以将单元从数组中删除 类数组
+  字符串不是字符数组，字符串不可变，数组可变。字符串不可变是指字符串的成员函数不会改变其原始值，而是创建并返回一个新的字符串。
+  JavaScript中的数字常量一般用十进制表示，数字前面的0也可以省略，小数点后小数部分最后面的0也可以省略。
+  整数的检测Number.isinteger()
+  undefined类型只有一个值，即undefined。void，undefined是一个内置标识符，他的值为undefined，通过void运算符即可得到该值。
+  NAN not a number
+  简单值  JavaScript中的数组是通过数字索引的一组任意类型的值，字符串和数组类似，但是他们的行为特征不同。基本类型中定义了几个特殊的值。null类型只有一个值null，undefined类型也只有一个值undefined，所有变量在赋值之前默认值都是undefined，void运算符返回undefined，数字类型有几个特殊值包括NAN。
+  第四章  强制类型转换
+  对象的toString
+一般对象的toString方法，将会显示该对象的[[class]]
+数组的toString
+数组由于自身重写过toString方法，数组的toString方法会返回逗号连接的字符串
+JSON.stringify()
+JSON.stringify()方法用于将数据转换为JSON格式的字符串，但是对于undefined, function, symbol类型的数据，在转换时会选择抛弃，从而返回undefined  转换对象在数组中时，这些值会被赋值为null  如果转换对象出现循环引用，那么在转换的时候会抛出异常。
+为了使得我们所有的对象在转换成JSON字符串的时候可以正常转换，我们可以定义toJSON方法，该方法在JSON.stringify调用前会进行调用，对数据进行处理
+对象转Number
+遵循toPrimitive的规则，如果对象存在valueOf方法，则调用该方法，如果调用后返回的结果为基本类型
+toBoolean
+boolean类型转换过程只会进行真假值的检查，其中假值包括: false, '', null, undefined, NaN, +0, -0，假值将会转换为false，假值以外的其他值均为真值，转换为true
+对于一个特殊的对象Object.create(null)，由于原型链的继承关系，该对象不继承Object，所以不存在valueOf和toString方法，那么在进行转换的时候将抛出异常
+显示类型转换
+String()和Number()转换
+按照基本类型转换 的toString和toNumber的规则进行转换
+一元运算符转换
+使用一元运算符(+, -)会将数据转换为number类型，相当于Number(data)
+symbol()对象转换
+Symbol对象不能通过隐式转换进行，如果要进行转换必须使用构造方法来显示转换（似乎只能转为字符串）。
+隐式类型转换
+逻辑语句中的类型转换
+作为逻辑语句中的判断条件，将转换为boolean值进行处理
+||和&&
+||和&&的操作，返回结果并不是boolean值，而是根据短路规则，判断操作数的Boolean()结果，返回两个操作数的其中之一，其中||在true时进行短路返回，&&在false时进行短路返回
+
+
