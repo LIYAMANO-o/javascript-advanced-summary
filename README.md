@@ -103,5 +103,123 @@ Symbol对象不能通过隐式转换进行，如果要进行转换必须使用�
 作为逻辑语句中的判断条件，将转换为boolean值进行处理
 ||和&&
 ||和&&的操作，返回结果并不是boolean值，而是根据短路规则，判断操作数的Boolean()结果，返回两个操作数的其中之一，其中||在true时进行短路返回，&&在false时进行短路返回
+  
+  
+《深入理解JavaScript》  
+第八章 值  
+一、JavaScript中的类型体系  
+1.JavaScript类型  
+ECMAscript语言类型包括：undefined,null,Boolean,String,Number,Object  
+2.静态与动态  
+静态一般是指“编译时”或者“非运行时”，动态指的是“运行时”。  
+3.静态类型与动态类型  
+在静态类型语言中，变量、参数和对象成员都有编译器编译时能识别的类型。在动态类型语言中，变量依然有一个动态的类型，是指在某一时刻变量值的类型。  
+JavaScript是动态类型的语言，变量的类型在编译的时候是不确定的。  
+4.静态类型检查和动态类型检查  
+静态类型检查语言会在编译期间进行检查， 动态类型检查语言会在执行期间进行检查。  
+5.强制转换  
+二、原始值和对象  
+1.原始值  
+布尔值：true,false  
+数字：1736,1.351  
+字符串：'abc',"abc"  
+两个空值：undefined，null  
+原始值特点：①按值进行比较  
+②不可改变  
+③固定类型组合  
+2.对象  
+简单对象，可以通过对象字面量来创建  
+数组，可以通过数组字面量来创建 ['apple', 'banana' , 'cherry']  
+正则表达式，可以通过正则表达式字面量来创建。  
+对象特点：①按引用进行比较  
+②默认可变  
+③用户可扩展  
+三、undefined和null  
+1.undefined和null的出现场景  
+undefined出现的场景  
+未初始化的变量是undefined：var foo;  foo;  
+缺失的参数是undefined：function f(x){return x}  f();  
+如果访问一个不存在的属性，会返回undefined：var obj={}; obj.foo  
+如果函数中没有显式地返回任何值，函数会隐式返回undefined：function f() {}  
+null的出现场景  
+null是原始链最顶端的元素 Object.getPrototypeOf(Object.prototype)  
+当字符串中没有匹配到正则表达式的结果时，RegExp.prototype.exec()会返回null  
+2.检测undefined和null  
+检测null  
+通过严格相等检测null：if(x===null)...  
+检测undefined  
+通过严格相等检测undefined：if(x===undefined)...  
+也可以通过typeof运算符检测undefined  
+检测undefined或null  
+有一种显式的比较方式用来检测他们：if(x!==undefined&&x!==null){...}  
+另一种检测方式是利用undefined和null都可被认为是false的特性：if(x){...} if(!x){...}   
+3.undefined和null的历史  
+遇到未初始化的变量和缺失的参数等异常情况时需要一个值来表示，null是一个很好的选择，但是要避免两种情况：  
+这个值不应该具有指向性，因为它表达的不仅仅是一个对象  
+这个值强制转换不应该为0，因为这会使错误难以发现  
+因此，将undefined作为另外一个空值加进了JavaScript。  
+4.修改undefined  
+技巧一：隐藏全局undefined（因为它可能是错误的值）  
+(function (undefined){
+if(x===undefined)...
+}());  
+技巧二：和'void 0'进行比较，'void 0'总是undefined if(x===void 0)  
+四、原始值的包装对象  
+1.包装对象不同于原始值  
+包装实例是对象  
+2.原始值的包装与去包装  
+通过调用包装构造函数来对原始值进行包装：  
+new Boolean(true)  
+new Number(123)  
+new String('abc')  
+通过调用valueOf()来对原始值进行去包装  
+new Boolean(true).valueOf()  
+new Number(123).valueOf()  
+new String('abc').valueOf()  
+把包装对象转换为原始值时只能正确地提取出数字和字符串，二布尔值则不能。  
+Boolean(new Boolean(false))  
+Number(new Number(123))  
+String(new String('abc'))  
+3.原始值从包装器借调方法  
+'abc'.charAt===String.prototype.charAt  
+在宽松模式中，原始值会在运行过程中转换为包装器：  
+String.prototype.sloppyMethod=function(){
+console.log(typeof this);  
+console.log(this instanceof String);  
+};  
+''.sloppyMethod();  
+在严格模式中，对包装器原型调用是透明的  
+String.prototype.sloppyMethod=function(){
+'use strict';  
+console.log(typeof this);  
+console.log(this instanceof String);  
+};  
+''.sloppyMethod();   
+五、强制类型转换  
+1.强制类型转换会隐藏bug  
+2.转换成布尔值、数字、字符串和对象的函数  
+Boolean() 转换为布尔值。 undefined，null，false，0，NAN，'' 转换为false  
+Number() 转换为数字。 undefined会转换成NaN。  
+null会转换成0。  
+false会转换成0，true 会转换成1。  
+字符串会被解析。  
+对象会先转换为原始值(很快会讲到)，然后再转换为数字。  
+String() 转换为字符串。  
+Object() 对象会转换为它们自身，undefined和null会转换成空对象，而原始值会转
+换为包装后的原始值。  
+3.算法：ToPrimitive() 将值转换为原始值  
+ToPrimitive(input, PreferredType?)  
+(1)如果input是原始值，返回这个值(没有其他需要做的)。  
+(2)否则，如果input是对象，调用input. value0f()。如果结果是原始值，
+返回结果。  
+(3)否则，调用input. toString()。如果结果是原始值，返回结果。  
+(4)否则，抛出一一个TypeError (说明将输入转换为原始值出错了)。  
+如果PreferredType是字符串，第二步和第三步会进行交换。PreferredType 也可以
+被省略，这种情况下，日期会被认为是String而其他值会被认为是Number.因此，
++运算符和== =运算符可以操作ToPrimitive()。
+
+
+
+
 
 
