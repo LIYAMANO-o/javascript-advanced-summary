@@ -216,7 +216,36 @@ ToPrimitive(input, PreferredType?)
 (4)否则，抛出一一个TypeError (说明将输入转换为原始值出错了)。  
 如果PreferredType是字符串，第二步和第三步会进行交换。PreferredType 也可以
 被省略，这种情况下，日期会被认为是String而其他值会被认为是Number.因此，
-+运算符和== =运算符可以操作ToPrimitive()。
++运算符和== =运算符可以操作ToPrimitive()。  
+
+《JavaScript权威指南》  
+第三章 类型、值和变量  
+一、数字  
+1.整型直接量
+在JavaScript程序中，用一个数字序列来表示一个十进制整数。JavaScript同样能识别十六进制值，但在  
+ECMAscript6的严格模式下，八进制直接量是明令禁止的。  
+2.浮点型直接量  
+浮点型直接量可以含有小数点  
+3.JavaScript中的算数运算  
+运算符：加法运算符(+) 、减法运算符(-)、乘法运算符(*) 、除法运算符(/) 和求余(求整除后的余数)运算符(%)   
+JavaScript预定义了全局变量infinity和NAN，用来表示正无穷大和非数字值。  
+4.二进制浮点数和四舍五入错误  
+当在JavaScript中使用实数的时候，常常只是真实值的一个近似表示。  
+5.日期和时间  
+Date()构造函数 var then = new Date(2011, 0, 1); /1 2011年1月1日  
+var later = new Date(2011, 0, 1, 17, 10，30);// 同一天，当地时间5:10:30pm,  
+varnow口newDate();//当前日期和时间  
+var elapsed = now - then; //日期减法:计算时间间隔的毫秒数  
+later . getFullYear() // => 2011  
+later . getMonth() /1 => 0;从0开始计数的月份  
+later . getDate() // => 1:从1开始计数的天数   
+later. .getDay() // => 5:得到星期几，0代表星期日， 5代表星期一  
+later . getHours() // =>当地时间17: 5pm  
+later . getUTCHours() //使用UTC表示小时的时间，基于时区  
+二、文本  
+
+
+
 
 
 
