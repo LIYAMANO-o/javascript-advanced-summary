@@ -1,6 +1,6 @@
 # javascript-advanced-summary
-《深入理解javascript》   
-第一章 基础JavaScript  
+#### 《深入理解javascript》   
+##### 第一章 基础JavaScript  
 一个单独的等于号（=），用于为变量赋值    三个连续的等于号（===），用于比较两个值  
 一、语句和表达式  
 语句：用来声明（或创建）一个变量 var foo;   表达式：表达式产生值  
@@ -54,7 +54,8 @@ return Array.prototype.slice.call(arrayLikeObject);
   十、正则表达式  
   test()方法：匹配吗、exec（）方法：匹配以及捕获分组、replace()方法：搜索和替换  
   标准库和其他功能：Date、JOSN  
-  第二章  为什么选择JavaScript  
+  
+  #### 第二章  为什么选择JavaScript  
   JavaScript语言的规范，他是一个ISO标准，有着许多独立的实现，其中一些是开源的。  
   类库：JavaScript有大量的类库，从解系JavaScript到处理和显示PDF文件。  
   Node.js 允许编写服务端代码以及shell脚本  
@@ -65,12 +66,12 @@ return Array.prototype.slice.call(arrayLikeObject);
   
   
   
-  《你不知道的JavaScript》  
-  第一章  类型  
+  #### 《你不知道的JavaScript》  
+  ##### 第一章  类型  
   七种内置类型：空值、未定义、布尔值、数字、字符串、对象、符号  
   使用typeof运算符查看值的类型，JavaScript中的变量时没有类型的，只有值才有。变量在未持有值的时候为undefined，此时typeof返回undefined。  
   JavaScript有七种内置类型：null   undefined  boolean   number  string  object  symbol   
-  第二章 值  
+  ##### 第二章 值  
   数组  数组可以容纳任何类型的值，使用delete可以将单元从数组中删除 类数组  
   字符串不是字符数组，字符串不可变，数组可变。字符串不可变是指字符串的成员函数不会改变其原始值，而是创建并返回一个新的字符串。  
   JavaScript中的数字常量一般用十进制表示，数字前面的0也可以省略，小数点后小数部分最后面的0也可以省略。  
@@ -78,7 +79,7 @@ return Array.prototype.slice.call(arrayLikeObject);
   undefined类型只有一个值，即undefined。void，undefined是一个内置标识符，他的值为undefined，通过void运算符即可得到该值。  
   NAN not a number  
   简单值  JavaScript中的数组是通过数字索引的一组任意类型的值，字符串和数组类似，但是他们的行为特征不同。基本类型中定义了几个特殊的值。null类型只有  一个值null，undefined类型也只有一个值undefined，所有变量在赋值之前默认值都是undefined，void运算符返回undefined，数字类型有几个特殊值包括NAN。  
-  第四章  强制类型转换  
+  ##### 第四章  强制类型转换  
   对象的toString  
 一般对象的toString方法，将会显示该对象的[[class]]  
 数组的toString  
@@ -105,8 +106,8 @@ Symbol对象不能通过隐式转换进行，如果要进行转换必须使用�
 ||和&&的操作，返回结果并不是boolean值，而是根据短路规则，判断操作数的Boolean()结果，返回两个操作数的其中之一，其中||在true时进行短路返回，&&在false时进行短路返回
   
   
-《深入理解JavaScript》  
-第八章 值  
+#### 《深入理解JavaScript》  
+##### 第八章 值  
 一、JavaScript中的类型体系  
 1.JavaScript类型  
 ECMAscript语言类型包括：undefined,null,Boolean,String,Number,Object  
@@ -218,8 +219,8 @@ ToPrimitive(input, PreferredType?)
 被省略，这种情况下，日期会被认为是String而其他值会被认为是Number.因此，
 +运算符和== =运算符可以操作ToPrimitive()。  
 
-《JavaScript权威指南》  
-第三章 类型、值和变量  
+#### 《JavaScript权威指南》  
+##### 第三章 类型、值和变量  
 一、数字  
 1.整型直接量
 在JavaScript程序中，用一个数字序列来表示一个十进制整数。JavaScript同样能识别十六进制值，但在  
@@ -244,7 +245,7 @@ later . getHours() // =>当地时间17: 5pm
 later . getUTCHours() //使用UTC表示小时的时间，基于时区  
 二、文本  
 
-《JavaScript权威指南》
+##### 《JavaScript权威指南》
 第8章
 
 #### prototype属性  
@@ -320,7 +321,7 @@ var stddev = Math.sqrt(deviations.ap(square).reduce(sum)/(data.1ength-1));
 2. apply（）方法  
 语法： fn.apply(thisObj，[arg1，arg2，...])（是一个参数数组）  
 其他用法均与call（）方法一样  
-【call()、apply()使用仍然是执行原来对象的方法里面的代码，只是代码中的this指向改变了。如果调用的对象方法里面没有this，那么使用call()和apply()没有任何改变，也没有意义  
+call()、apply()使用仍然是执行原来对象的方法里面的代码，只是代码中的this指向改变了。如果调用的对象方法里面没有this，那么使用call()和apply()没有任何改变，也没有意义  
         var x = 100;  
         var obj = {  
             x: 50  
@@ -397,8 +398,8 @@ Function( )构造函数允许JavaScript在运行时动态地创建并编译函�
 
 
 
-《深入理解JavaScript》  
-第15章  
+#### 《深入理解JavaScript》  
+##### 第15章  
 一、JavaScript中函数的3种形式  
 1.非方法的函数  
 2.构造器 通过new操作符来调用一个函数  
@@ -486,7 +487,7 @@ C的实际签名，它有可能支持可选参数。
 也可以将位置型参数和具名参数相结合。  
 
 
-第16章
+##### 第16章
 ### 作用域、环境和闭包  
 1.定义变量  
 在JavaScript中，在使用变量前，你可以通过var语句来定义变量:  
@@ -706,8 +707,8 @@ return startVa lue;
 （2）在这个创建的新环境中存储当前i的值。  
 
 
-《你不知道的JavaScript》上卷  
-第一章  
+#### 《你不知道的JavaScript》上卷  
+##### 第一章  
 #### 编译原理  
 源代码在执行之前的三个步骤：  
 1.分词/词法分析：会将由字符组成的字符串分解成有意义的代码块，这些代 码块被称为词法单元。  
@@ -746,7 +747,7 @@ foo( 2 );
 严格模式：在 严格模式中 LHS 查询失败时，并不会创建并返回一个全局变量，引擎会抛出同 RHS 查询 失败时类似的 ReferenceError 异常。  
 注：不成功的 RHS 引用会导致抛出 ReferenceError 异常。不成功的 LHS 引用会导致自动隐式 地创建一个全局变量（非严格模式下），该变量使用 LHS 引用的目标作为标识符，或者抛 出 ReferenceError 异常（严格模式下）。  
 
-第二章 
+##### 第二章 
 #### 词法作用域  
 1.词法阶段  
 function foo(a) {     
@@ -776,7 +777,7 @@ with 声明实际上是根据传递给它的对象凭空创建了一个全新的
 注：  
 ①词法作用域意味着作用域是由书写代码时函数声明的位置来决定的。  
 ②JavaScript 中有两个机制可以“欺骗”词法作用域：eval(..) 和 with。  
-第三章  
+##### 第三章  
 #### 函数中的作用域  
 函数作用域的含义：属于这个函数的全部变量都可以在整个函数的范围内使用及复用  
 隐藏内部：  
@@ -880,7 +881,7 @@ for 循环头部的 let 不仅将 i 绑定到了 for 循环的块中，事实上
 由于 let 声明附属于一个新的作用域而不是当前的函数作用域（也不属于全局作用域）， 当代码中存在对于函数作用域中 var 声明的隐式依赖时，就会有很多隐藏的陷阱，如果用 let 来替代 var 则需要在代码重构的过程中付出额外的精力。  
 （四）const  
  const，同样可以用来创建块作用域变量，但其值是固定的 （常量）  
- 第四章  
+ ##### 第四章  
  (一)  
 ①JavaScript会提前所有的变量声明，它会把所有的声明移到直接作用域的最前面。  
 function f() {  
@@ -947,7 +948,7 @@ function foo() {
    console.log( 3 );  
 }  
 
-第五章  
+##### 第五章  
 function foo() {     
    var a = 2;   
    function bar() {        
@@ -1030,6 +1031,102 @@ foo.doAnother(); // 1 ! 2 ! 3
 这个模式在 JavaScript 中被称为模块。最常见的实现模块模式的方法通常被称为模块暴露， 这里展示的是其变体  
 （4）模块也是普通的函数，因此可以接受参数。模块模式另一个简单但强大的变化用法是，命名将要作为公共 API 返回的对象  
 （5）模块有两个主要特征： ①为创建内部作用域而调用了一个包装函数；②包装函数的返回值必须至少包括一个对内部函数的引用，这样就会创建涵盖整个包装函数内部作用域的闭包。  
+
+#### 《深入理解JavaScript》
+##### 第17章对象与继承
+JavaScript中的面向对象编程分为四层：  
+1.单一对象的面向对象  
+2.对象间的原型链  
+3.作为实例工厂的构造函数，类似于其他语言中的类  
+4.子类，通过继承已有的构造函数，创建新的构造函数  
+一、单一对象  
+1.属性的种类  
+①属性：对象中的普通属性，包括方法被称为数据属性。  
+②访问器：类似于读、写属性的特殊方法。属性的值存储在普通属性中，而访问器可以计算属性的值。  
+③内置属性：只存在于ECMAScript语言规范中。不能用JavaScript直接访问，但可以用简介的方式访问，规范将内置的键置于方括号中。  
+2.对象字面量：创建简单对象  
+var jane={  
+    name:'Jane',  
+    describe:function(){  
+      return 'person named'+this.name;  
+     },  
+    };  
+ ①在方法中使用this来指代当前对象  
+ ②ECMAScript5允许在对象字面量的最后一个属性之后跟一个逗号。
+ 3.点运算符  
+ ①获取属性 jane.name  
+ 获取一个不存在的属性会返回undefined  
+ ②调用方法 jane. describe()  
+ ③设置属性 使用赋值操作符(=)为点操作符指向的属性赋值。 jane.name='John'  
+ ④删除属性 delete操作符从一个对象中完全移除一个属性  
+ var obj={hello:'world'};  
+ delete obj.hello  
+ 删除只影响一个对象的直接属性，并不涉及它的原型。  
+ ⑤delete返回值  
+ 如果属性是自有属性，且不能被删除，delete会返回false，其他情况都返回true。  
+ 4.特殊的属性键  
+ ①不能使用保留字作为变量名，但可以使用他们作为属性的键。var obj={var:'a',function:'b'};  
+ ②在对象字面量中，数字也可以用来作为属性的键，但会被解析为字符串。 var obj={0.7:'abc'};  
+ ③对象字面量也可以使用任意字符串作为属性的键，但必须加上引号。 var obj={'not an identifier':123};  
+ 5.中括号操作符[]  
+ ①通过中括号操作符获取属性  
+ 通过表达式计算得出一个属性的键：  
+ var obj={someProperty:'abc'};  
+ obj['some'+'Property'] //'abc'  
+ var propkey='someProperty';  
+ obj[propkey] //'abc'   
+ 通过非标识符的键访问属性：  
+ var obj={'not an identifier':123}  
+ obj['not an identifier'] //123  
+ 中括号操作符强制括号中的内容转化为字符串：  
+ var obj={'6':'bar'};  
+ obj[3+3] //'bar'  
+ ②通过中括号操作符调用方法  
+ var obj = { myMethod: function () { return true } } ;  
+obj[ ' myMethod']( )  
+//true  
+③通过中括号操作符设置属性  
+varobj={};  
+obj[ ' anotherProperty'] = 'def' ;  
+obj. anotherProperty  
+//'def'  
+④通过中括号操作符删除属性  
+ var obj = { 'not an identifier': 1, prop: 2 };  
+object. keys(obj)  
+//[ 'not an identifier '，' prop' ]    
+ delete obj[ ' not an identifier ']  
+//true  
+object . keys(obj)  
+//['prop']  
+二、把任意值转化为对象  
+Object():{}  
+Object(undefined):{}   
+Object(null):{}   
+Object(true/false):new Boolean(bool)  
+Object(数字num):new Number(num)  
+Object(字符串str):new String(str)  
+Object(对象obj):obj  
+三、this作为函数和方法的隐式参数  
+宽松模式中的普通函数：值总是指向全局对象  
+严格模式中的普通函数：this总是undefined  
+方法：this指向调用方法的对象  
+1.在调用函数时设置this  
+call() apply() bind()  
+①Function.prototype.call(thisValue,arg1,arg2...)  
+第一个参数会赋值给被调用函数内的this，剩下的参量作为参数传入被调函数。  
+②Function.prototype.apply(thisValue,argArray)    
+第一个参数会赋值给被调函数内的this，第二个参数是一个数组。  
+2.Function.prototype.call(thisValue,arg1,arg2...) 
+
+
+ 
+  
+ 
+ 
+ 
+    
+
+
 
 
 
