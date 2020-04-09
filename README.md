@@ -1039,7 +1039,7 @@ JavaScript中的面向对象编程分为四层：
 2.对象间的原型链  
 3.作为实例工厂的构造函数，类似于其他语言中的类  
 4.子类，通过继承已有的构造函数，创建新的构造函数  
-一、单一对象  
+#### 一、单一对象  
 1.属性的种类  
 ①属性：对象中的普通属性，包括方法被称为数据属性。  
 ②访问器：类似于读、写属性的特殊方法。属性的值存储在普通属性中，而访问器可以计算属性的值。  
@@ -1116,7 +1116,121 @@ call() apply() bind()
 第一个参数会赋值给被调用函数内的this，剩下的参量作为参数传入被调函数。  
 ②Function.prototype.apply(thisValue,argArray)    
 第一个参数会赋值给被调函数内的this，第二个参数是一个数组。  
-2.Function.prototype.call(thisValue,arg1,arg2...) 
+2.Function.prototype.bind(thisValue,arg1,arg2...)   
+this的值是thisValue，参数从arg1到argN，紧随其后的是新函数的参数。  
+注：数组方法slice用来把arguments转化为数组。  
+3.用于构造函数的apply()  
+①为构造函数手动模拟apply():  
+第一步：通过方法调用，把参数传给Date. new (Date.bind(null,2011,11,24));
+第二步：使用apply()把数组传给bind(). new(Function.prototype.bind.apply(Date,[null,2011,11,24]));  
+②通过Object.create()创建未初始化的实例，然后通过apply()调用构造函数。  
+4.提取方法时丢失this：从一个对象中提取方法，这个方法又变成真正的函数，它与对象的连接被切断，不会再正常工作。  
+5.嵌套函数：一个方法包含普通函数，而在后者的内部访问前者，方法的this被普通函数的this掩盖。  
+解决方案：  
+①that=this 把this赋值给变量that  
+②bind() 使用bind()给回调函数的this绑定固定值，即函数的this。  
+③forEach()的thisValue 在回调函数后提供第二个参数，该参数成为回调函数的this。  
+#### 四、第二层：对象间的原型关系  
+1.继承：当访问属性时，JavaScript首先从本对象中查找，接着是原型，以及原型的原型，以此类推。  
+2.覆写：前者的属性最先被找到，它隐藏了后者的属性，这样后者的属性就不能被访问了。  
+3.通过原型在对象间共享数据：多个对象可以有相同的原型，这个原型持有所有的共享属性。数据保存在原型链的第一对象中，而方法保存在后面的对象中。  
+4.获取和设置原型  
+①使用给定prototype创建新对象  
+Object.create(proto,propDescObj?)
+②读取对象原型  
+Object.getPrototypeOf(obj)  
+③检查一个对象是否是另一个对象的原型（检查方法的接收者是否是obj的原型）    
+Object.prototype.isPrototypeOf(obj)  
+④找到定义属性的对象  
+5.__proto__  
+注：__proto__ 不属于ECMAScript 5标准，它将成为ECMAScript 6的一部分。  
+检测引擎是否支持特殊属性__proto__：Object.getPrototypeOf({__proto__:null})===null  
+6.设置和删除仅影响自有属性  
+①设置属性  
+创建一个自有属性，即使已存在继承了该key的属性。  
+②删除继承的属性  
+只能删除自有属性。  
+③在原型链的任何位置改变属性  
+找到拥有这个属性的对象，然后改变这个对象的相应属性。  
+五、遍历和检测属性（受继承和枚举的影响）  
+1.列出自有的属性键  
+只列出可枚举的属性键：  
+Object.getOwnPropertyNames(obj) 返回obj的所有自有的属性键。  
+Object.keys(obj) 返回obj的所有可枚举的属性键。  
+2.列出所有的属性键：  
+①使用循环  
+for(<variable> in <object>)  
+②实现一个函数，遍历所有属性  
+3.检测属性是否存在  
+propKey in obj  
+如果obj拥有一个键为propKey的属性，则返回true。  
+Object.prototype.hasOwnproperty(propKey)  
+如果接受者拥有一个键为propKey的自有属性，则返回true。  
+4.枚举的影响：  
+影响for-in循环和Object.keys()  
+for-in循环遍历所有可枚举属性的键，包括继承来的属性的键:  
+for (var x in obj) console. log(x);  
+//objEnunTrue  
+//protoEnunT rue  
+object.keys()返回所有自有(非继承)可枚举属性的键:  
+> 0bject .keys(obj)  
+//[ ' objEnunTrue' ]  
+继承的影响：  
+只有for-in循环和in操作符和继承有关  
+计算对象自有属性的个数  
+对象没有类似length或size的方法，因此需要使用下面这种方式:
+object. keys( obj). length  
+六、遍历自有属性  
+遍历属性键：  
+①结合for-in和hasOwnProperty()  
+for (var key in obj) {  
+if (0bject .prototype .hasOwnProperty.call(obj, key)) {  
+console. log(key);  
+}  
+②Object. keys ()或0bj ect . getOwnPropertyNames ()与forEach()结
+合遍历数组:  
+var obj = { first: 'John', last: 'Doe' };  
+// Visit non- inheri ted enunerable keys  
+0bject. keys(obj). forEach(function (key) {  
+console. log(key);   
+});  
+遍历属性值或键值对：  
+遍历所有的键，然后用每个键获得对应的值。  
+七、访问器  
+1.通过对象字面量定义访问器  
+2.通过属性描述符定义访问器  
+通过属性描述符指定getter和setter  
+3.访问器和继承  
+getter和setter继承自原型  
+八、属性特性和属性描述符  
+1.属性特性  
+[[Value]]持有属性的值，即它的数据。  
+[[Writable]]持有布尔类型的值，表示属性值是否可以改变。  
+访问器具有的特性:  
+[[Get]] 持有getter, 读取属性时调用的函数。该函数计算读取的结果。  
+[[Set]] 持有setter, 为属性设置值时调用的函数。该函数接收设置的值作为
+参数。  
+所有的属性都有如下特性:  
+[[Enumerable]]持有一个布尔值。设置一个属性不可枚举，那么在某些操作中
+会隐藏此属性。  
+[[Configurable]]持有一个布尔值。如果它是false,那么不能删除.  
+默认值：  
+[[Value]]：undefined  
+[[Get]]:undefined  
+[[Set]]:undefined  
+[[Writable]]:false  
+[[Enumerable]]:false  
+[[Configurable]]:false  
+2.属性描述符  
+用于编程处理特性的一种数据结构，它是一个编码属性特性的对象
+
+
+
+
+
+
+
+
 
 
  
