@@ -1221,7 +1221,116 @@ getter和setter继承自原型
 [[Enumerable]]:false  
 [[Configurable]]:false  
 2.属性描述符  
-用于编程处理特性的一种数据结构，它是一个编码属性特性的对象
+用于编程处理特性的一种数据结构，它是一个编码属性特性的对象   
+3.通过描述符获取和定义属性  
+①获取属性：一个属性的所有特性都通过一个描述符返回。  
+②定义属性：取决于该属性是否已经存在。  
+如果不存在：创建一个新的属性，特性由描述符指定，如果描述符中没有特性对应的属性，则使用默认值。  
+如果存在：更新描述符指定的属性特性，如果描述符中的属性没有对应的特性，则属性不变。  
+Object.getOwnpropertyDescriptor(obj,propKey)  
+返回obj对象的propKey键自有属性描述符，如果没有该属性，则返回undefined.  
+Object.defineproperty(obj,propKey,propDesc)  
+创建或改变obj对象的propKey键的属性，并通过propDesc指定这个属性的特性，会返回修改后的对象。  
+Object.defineProperties(obj,propDescObj)  
+propDesc0bj 的每个属性都持有一个属性描述符。属性的键和值告诉0bject . defineProperties创
+建或改变obj的哪些属性。  
+Object.create(proto,propDescObj?)  
+首先，创建原型为proto的对象。然后,如果指定了可选参数propDesc0bj,用类似object.defineProperties 的同样方式给对象添加属性。最后，返回处理结果。  
+4.复制对象  
+创建一个对象完全相同的拷贝：  
+①拷贝必须具有与原对象相同的原型  
+②拷贝必须具有与原对象相同的属性和特性  
+function copy0bject(orig) {  
+// 1. copy has sane prototype as orig  
+var copy = object . create(0bject . getPrototype0f(orig));  
+// 2. copy has all of orig's properties  
+copyOwnPropertiesFron(copy, orig);  
+return copy;  
+}  
+这个函数把属性从orig复制到copy:  
+function copyOwnPropertiesFrom(target, source) {  
+object . getOwnPropertyNanes(source) // (1)  
+. forEach( function(propkey) { // (2) .  
+var desc = 0bject . getOwnProper tyDescriptor(source, propKey); // (3)  
+object . defineProper ty(target, propKey, desc); // (4)  
+});  
+return target;  
+};  
+步骤：  
+(1)获得source 所有自有属性键的数组。  
+(2)遍历这些键。  
+(3)获取属性描述符。  
+(4)使用属性描述符创建target 的自有属性。  
+5.属性：定义与赋值  
+①通过defineProperty ()和defineProperties()定义属性  
+②通过=给属性赋值。  
+注：这两种情况都会完全忽略原型链  
+给属性prop赋值意味着改变已存在的属性  
+6.继承的只读属性不能被赋值  
+7.枚举性  
+枚举的主要目的：判断for-in循环中的哪些属性应该忽略。  
+枚举性影响：  
+①for-in循环  
+②Object.keys()  
+③JSON-stringify()  
+注：通常可以忽略枚举性，且应该避免使用for-in循环。  
+不应该给内置原型和对象添加属性。  
+9.保护对象  
+①防止扩展 Object.preventExtensions(obj)  
+检测对象是否可以扩展：Object.isExtensible(obj)  
+②封闭  
+密封：Object.seal(obj)  
+判断一个对象是否封闭：Object.isSealed(obj)  
+③冻结  
+执行冻结：Object.freeze(obj)  
+检测一个对象是否被冻结：Object.isFrozen(obj)  
+#### 第三层：构造函数  
+数据是由实例指定的，并存储在实例对象的自有属性中  
+行为被所有的实例所共享，它们公用一个带有方法的原型对象  
+构造函数是通过new操作符调用的函数，名字以大写字母开头：  
+function Person(name){  
+  this.name=name;  
+}  
+Person.prototype中的对象成为Person所有实例的原型：  
+Person.prototype.describe=function(){  
+  return 'Person named'+this.name;  
+ };  
+ new操作符执行步骤：  
+ ①设置行为：创建一个新对象，其原型为Person.prototype.  
+ ②设置数据：Person接受对象作为隐式参数this，并添加实例属性。  
+ 1.JavaScript中new操作符的实现  
+ function newOperator(Constr, args) {  
+var thisValue = object . create(Constr . prototype);// (1)  
+var result = Constr .apply(thisValue, args);    
+if (typeof result === 'object' & result !== null) {    
+return result; // (2)  
+}  
+return thisValue;  
+2.两个原型  
+原型一：原型关系  
+一个对象可以是另一个对象的原型:   
+ var proto = {};    
+ var obj = object. create(proto);  
+ object . getPrototype0f(obj) === proto  
+//true  
+proto 是obj的原型。  
+原型二：prototype属性的值  
+每个构造函数C都有一个prototype 属性，它指向一个对象。该对象成为构造函数C的所有实例的原型:  
+function C() {}  
+ object . getPrototype0f(new C()) === C. prototype  
+//true  
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
