@@ -1170,9 +1170,9 @@ Object.prototype.hasOwnproperty(propKey)
 for-in循环遍历所有可枚举属性的键，包括继承来的属性的键:  
 for (var x in obj) console. log(x);  
 //objEnunTrue  
-//protoEnun True
-object.keys()返回所有自有(非继承)可枚举属性的键:  
-> 0bject .keys(obj)  
+//protoEnun True  
+object.keys()返回所有自有(非继承)可枚举属性的键:
+ 0bject .keys(obj)  
 //[ ' objEnunTrue' ]  
 继承的影响：  
 只有for-in循环和in操作符和继承有关  
