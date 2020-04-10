@@ -1133,8 +1133,8 @@ this的值是thisValue，参数从arg1到argN，紧随其后的是新函数的�
 #### 四、第二层：对象间的原型关系  
 1.继承：当访问属性时，JavaScript首先从本对象中查找，接着是原型，以及原型的原型，以此类推。  
 2.覆写：前者的属性最先被找到，它隐藏了后者的属性，这样后者的属性就不能被访问了。  
-3.通过原型在对象间共享数据：多个对象可以有相同的原型，这个原型持有所有的共享属性。数据保存在原型链的第一对象中，而方法保存在后面的对象中。  
-4.获取和设置原型  
+3.通过原型在对象间共享数据：多个对象可以有相同的原型，这个原型持有所有的共享属性。数据保存在原型链的第一对象中，而方法保存在后面的对象中。
+4.获取和设置原型 
 ①使用给定prototype创建新对象  
 Object.create(proto,propDescObj?)
 ②读取对象原型  
@@ -1158,12 +1158,11 @@ Object.prototype.isPrototypeOf(obj)
 Object.getOwnPropertyNames(obj) 返回obj的所有自有的属性键。  
 Object.keys(obj) 返回obj的所有可枚举的属性键。  
 2.列出所有的属性键：  
-①使用循环  
-for(<variable> in <object>)  
-②实现一个函数，遍历所有属性  
+①使用循环
+②实现一个函数，遍历所有属性
 3.检测属性是否存在  
 propKey in obj  
-如果obj拥有一个键为propKey的属性，则返回true。  
+如果obj拥有一个键为propKey的属性，则返回true。
 Object.prototype.hasOwnproperty(propKey)  
 如果接受者拥有一个键为propKey的自有属性，则返回true。  
 4.枚举的影响：  
@@ -1171,7 +1170,7 @@ Object.prototype.hasOwnproperty(propKey)
 for-in循环遍历所有可枚举属性的键，包括继承来的属性的键:  
 for (var x in obj) console. log(x);  
 //objEnunTrue  
-//protoEnunT rue  
+//protoEnun True
 object.keys()返回所有自有(非继承)可枚举属性的键:  
 > 0bject .keys(obj)  
 //[ ' objEnunTrue' ]  
@@ -1223,10 +1222,6 @@ getter和setter继承自原型
 [[Configurable]]:false  
 2.属性描述符  
 用于编程处理特性的一种数据结构，它是一个编码属性特性的对象
-
-
-
-
 
 
 
