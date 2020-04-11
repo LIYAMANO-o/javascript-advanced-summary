@@ -1318,7 +1318,294 @@ proto 是obj的原型。
 每个构造函数C都有一个prototype 属性，它指向一个对象。该对象成为构造函数C的所有实例的原型:  
 function C() {}  
  object . getPrototype0f(new C()) === C. prototype  
+//true    
+### 第三层：构造函数  
+#### 构造函数————实例工厂  
+数据是由实例指定的，并存储在实例对象的自有属性中  
+行为被所有的实例所共享，它们公用一个带有方法的原型对象  
+构造函数是通过new操作符调用的函数，名字以大写字母开头：  
+function Person(name){  
+  this.name=name;  
+}  
+Person.prototype中的对象成为Person所有实例的原型：  
+Person.prototype.describe=function(){  
+  return 'Person named'+this.name;  
+ };  
+new操作符执行步骤：  
+①设置行为：创建一个新对象，其原型为Person.prototype.  
+②设置数据：Person接受对象作为隐式参数this，并添加实例属性。  
+1.JavaScript中new操作符的实现  
+function newOperator(Constr, args) {  
+var thisValue = object . create(Constr . prototype);// (1)   
+var result = Constr .apply(thisValue, args);    
+if (typeof result === 'object' & result !== null) {    
+return result; // (2)  
+}  
+return thisValue;  
+2.两个原型  
+原型一：原型关系  
+一个对象可以是另一个对象的原型:   
+var proto = {};    
+var obj = object. create(proto);  
+object . getPrototype0f(obj) === proto   
 //true  
+proto 是obj的原型。  
+原型二：prototype属性的值  
+每个构造函数C都有一个prototype 属性，它指向一个对象。该对象成为构造函数C的所有实例的原型:  
+function C() {}  
+ object . getPrototype0f(new C()) === C. prototype  
+//true  
+3. 实例的constructor属性  
+默认每个函数C包含一个实例原型对象C.prototype, 它的constructor属性指回C:  
+function C() {}  
+C.prototype .constructor === C   //true  
+因为每个实例都从原型中继承了constructor 属性，所以你可以使用它得到实例的构造函数。  
+var o=new C();  
+o.constructor  //[Function: C]  
+(1)constructor属性的用例  
+①切换对象的构造函数  
+这个方法只检测给定构造函数的直接实例。相比之下, instanceof既检测直接实例，也检测所有子构造函数的实例。  
+②确定对象的构造函数名  
+例如:   
+function Foo() {}  
+var f = new Foo();  
+f.constructor.name   //' Foo'  (不是所有的JS引擎都支持函数的name属性)  
+③创建相似对象  
+function Constr() {}  
+var x = new Constr();  
+var y = new x.constructor();  
+console. log(y instanceof Constr); // true  
+对象y和x有相同的构造函数  
+这个技巧可用于子构造函数( subconstructors)实例的方法，且想要创建一个和this相似的新实例。这样就不能使用一个固定的构造函数:  
+SuperConstr.prototype.createCopy = function () {  
+return new this . constructor(...);  
+};  
+④指向父构造函数  
+一些继承库把父构造函数(superprototype) 赋值给子构造函数( subconstructor)的一个属性。例如，YUI 框架通过Y.extend提供子类:  
+function Super() {  
+}  
+function Sub() {  
+Sub.superclass.constructor.call(this); // (1)  
+}  
+Y.extend(Sub, Super );  
+行(1)执行的调用，是因为extend 把Sub. superclass设置为Super.prototype。正是由于有了constructor 属性，你才可以把父构造函数(superconstructor)作为方法来调用。  
+注：C.prototype.constructor===C  
+4. instanceof运算符  
+value instanceof Constr  
+它是检测Constr. prototype是否在value的原型链上。因此，下面的两个表达式是等价的:  
+value instanceof Constr   
+Constr.prototype.isPrototype0f(value)  
+例：  
+{} instanceof object  //true  
+[] instanceof Array /1 constructor of []  //true  
+[] instanceof 0bject /1 super-constructor of[]  //true  
+new Date() instanceof Date  //true  
+new Date() instanceof object  //true  
+正如所料，instanceof 对基本类型的值总是false:  
+'abc' instanceof object  //false  
+123 instanceof Number  //false  
+最后，如果instanceof的右边不是函数，它会抛出异常:  
+[] instanceof 123  
+TypeError: Expecting a functton in instanceof check  
+几乎所有的对象都是object的实例，因为Object. prototype在这些对象的原型链上。但也有对象不属于这种情况。下面有两个例子:  
+Object. create( null) instanceof Object  //false  
+0bject . prototype instanceof object  //false  
+下面是没有原型的对象  
+object . getPrototype0f(Object . create(null))  //null  
+0bject . getPrototype0f(0bject . prototype)   //null  
+但typeof 可以正确地把这些对象归类为对象:  
+typeof 0bject .create(null)  //' object'  
+typeof object . prototype  //'object'   
+5. 实现构造函数的小技巧  
+①防止遗漏new：严格模式  
+如果你在使用构造函数时忘记了new, 那么该函数会作为一个普通函数调用，而不是构造函数。在宽松模式下，你不会得到实例而是创建了全局变量。不幸的是，发生这一切并不会有任何警告。而用严格模式就会出现异常警告。  
+②从构造函数返回任意对象  
+在JavaScript中，你可以简单地从构造函数中返回任何需要的对象。  
+#### 原型属性中的数据  
+1. 对于实例属性，避免使用带初始值的原型属性  
+①不应共享默认值  
+②根据需要创建实例属性  
+2. 避免非多态的原型属性  
+如果相同的属性(相同的键、相同语义，通常有不同的值)，在几个原型中同时存在，称为多态( polymorphic)。那么通过实例读取属性的结果是由实例原型动态决定的。原型属性不用于多态情况时，可以替换为变量(这可以更好地反映非多态性)。  
+例如，你可以在原型属性中存储一个常量，并通过this访问:  
+function Foo() {}   
+Foo. prototype. FACTOR = 42;  
+Foo. prototype . compute = function (x) {  
+return x * this . FACTOR;  
+}；  
+这个常量不是多态的。因此你也可以通过变量访问:  
+// This code should be inside an IIFE or a module  
+function Foo() {}  
+var FACTOR = 42;  
+Foo . prototype. compute = function (x) {  
+return x * FACTOR;  
+};  
+3. 多态的原型属性  
+下面是一个用不可变数据设置多态原型属性的例子。通过原型属性标记的构造函数实例，你可以区分不同构造函数生成的实例。  
+function ConstrA() { }  
+ConstrA. prototype .TYPE_ NAME = 'ConstrA';  
+function ConstrB() { }  
+ConstrB. prototype.TYPE_ NAME = ' ConstrB' ;  
+#### 保持数据私有性  
+JavaScript没有专门的方式来管理对象的私有数据。以下是3种技术来突破这种局限:  
+构造函数环境中的私有数据;  
+带有特殊标记键的属性中的私有数据;  
+具体化键的属性中的私有数据。  
+1. 构造函数环境中的私有数据  
+在调用构造函数时，创建了两个东西:构造函数实例和环境。该实例由构造函数初始化，而该环境保持了构造函数的参数和局部变量。每个在构造函数内部创建的函数(包括方法)都会保存此环境(创建函数时的环境)的引用。由于保存了此环境的引用，即使在构造函数执行结束后，也仍然可以访问这个环境。这种函数和环境的结合称为闭包(闭包:使得函数可以维持其创建时所在的作用域)。构造函数的环境是独立于实例的数据存储，且与实例关联只因为这两个是同时创建的。为了正确连接实例和环境，我们必须使函数在这两个范围中都可用。使用Douglas Crockford的技术，实例可以有三种值与之关联：  
+（1）公有属性  
+存储在属性中的值(实例或它的原型)是可以公共访问的。  
+（2）私有值  
+存储在环境中的数据和函数是私有的————只有构造函数和构造函数创建的函数可以访问。  
+构造函数的环境由参数和局部变量组成。它们只能从构造函数内部访问，因此被实例所私有:  
+（3）特权方法  
+私有函数可以访问公有属性，但原型中的公有方法不能访问私有数据。因此我们需要特权方法————实例中的共有方法。特权方法是公有的，且可以被任何实例调用，而这种方法也可以访问私有值，因为它们是在构造函数中创建的。  
+· Crockford私有模式的利弊  
+在使用Crockford 私有模式时，有几点需要考虑:  
+(1)它不是很优雅  
+(2)它是完全安全的  
+(3)它可能比较慢  
+(4)它会消耗更多的内存  
+2. 使用标记的键的属性保存私有数据  
+通过带有标记的属性键实现私有性有一些利弊:  
+(1)它提供了更自然的编码风格  
+(2)它污染了属性的命名空间  
+(3)可以从“外部”访问私有属性  
+(4)它会导致键的冲突  
+3. 使用具体化键的属性保存私有数据  
+私有属性命名约定的一个问题是可能导致属性键冲突(例如，构造函数中的键和子构造函数中的键，或来自mixin 的键和来自构造函数的键)。你可以使用较长的键避免冲突,例如,包含构造函数的名字：私有属性_ buffer将称为_ StringBuilder_ buffer。 如果这种键对你来说太长，那么可以选择把
+键具体化，存储在变量中:var KEY__BUFFER = ' _ StringBuilder_ buffer';   
+4. 通过IFE保持全局数据私有  
+①把私有全局数据存储于一个单例对象  
+②保持全局数据对所有构造函数私有  
+③把全局数据放在一个方法中  
+### 第四层：构造函数之间的继承  
+#### 如何继承构造函数  
+给定构造函数Super，我们如何编写新的构造函数Sub， 它除了拥有Super 的所有特性，还增加了一些自己的特性。  
+1. 继承实例属性  
+实例的属性是在它自己的构造函数中设置的，因此继承父构造函数的实例属性会涉及调用其父构造函数:  
+function Sub(prop1, prop2, prop3, prop4) {  
+Super .call(this, prop1, prop2); // (1)   
+this.prop3 = prop3; // (2)  
+this .prop4 = prop4; // (3)  
+}  
+通过new调用Sub时，它的隐式参数this指向一个新的实例。它首先把该实例传给Super (1)， Super添加自己的实例属性。之后，Sub设置它自己的实例属性(2,3)。该技巧是，不要通过new调用Super,因为这样会创建一个新的Super实例。相反，我们把Super作为普通函数调用，并传递当前(sub) 实例作为this的值。  
+2. 继承原型属性  
+共享的属性，例如方法会保存在实例的原型中。因此我们需要为Sub.prototype找到一种方法来继承Super.prototype的所有属性。这个解决方法是指定Sub.prototype的原型为Super.prototype  
+3. 确保instanceof正常工作  
+“确保instanceof正常工作”意味着每个Sub的实例必须也是Super的实例。  
+4. 覆写方法  
+我们通过添加Sub.prototype.methodB的同名方法，可以覆写Super.prototype的方法  
+5. 父调用  
+一个方法的主对象是一个对象，它具有一个属性且该属性的值指向这个方法。例如，Sub. prototype.methodB的主对象是Sub.prototype。父调用foo 方法包括三个步骤。  
+(1)从(原型中的)当前方法中的主对象“之后”，开始查找。  
+(2)查找名为foo的方法。  
+(3)用当前的this调用此方法。基本原理是，父方法(supermethod)必须作为当前方法使用同一实例调用;父方法必须可以访问同一实例的属性。  
+6. 避免硬编码父构造函数的名字  
+通过把父原型赋值给Sub的一个属性来避免这个问题。  
+Sub._ super = Super . prototype;
+然后，如下这样调用父构造函数和父方法:  
+function Sub(prop1, prop2, prop3, prop4) {  
+   Sub._ super .constructor .call(this, prop1, prop2);  
+   this.prop3 = prop3;  
+   this .prop4 = prop4;  
+}  
+Sub . prototype .nethodB = function (x, y) {   
+   var superResult = Sub._ super .methodB .call(this, x, y);  
+   return this.prop3 + ' ' + superResult;  
+}  
+设置Sub._ super通常由工具函数处理，并保持子原型到父原型连接。  
+#### 所有对象的方法  
+object. prototype几乎在所有的对象的原型链上:  
+> Object . prototype . isPrototype0f({})  
+true  
+> object . prototype. isPrototype0f([ ])  
+true  
+> Object. prototype . isPrototype0f( /xyz/)  
+true  
+1. 转换为原始值  
+（1）把对象转换为基本类型  
+①Object.prototype.toString():  
+({ first: ' John ', last: 'Doe' }. toString())  //'[object object]'  
+[ 'a',, 'b', 'c' ].toString()   //a,b,c'  
+②Object.prototype.valueof()  
+这个方法是把对象转换为数字的推荐方式。默认实现会返回this:  
+var obj={};  obj.value0f() === obj     //true  
+value0f被包装的构造函数覆写，返回包装后的基本类型:   
+new Number(7).value0f()    //7  
+转换为数字和字符串(隐式或显式)建立在转换为基础类型的基础上。这就是为什么可以使用上述两种方法来配置那些转换。转换为数字推荐使用valueOf()。   
+{value0f:function(){return5}}    //15  
+转换为字符串推荐使用toString():  
+String({ toString: function () { return 'ME' } })   //'Result: ME'  
+不能设置转换为布尔类型:对象总被认为是true  
+2. Object.prototype.toLocaleString()  
+这个方法返回特定于本地语言环境的代表对象的字符串。默认实现调用toString()。大多数引擎都支持这个方法。  
+3. 原型式继承和属性  
+下面的方法用于原型式继承和属性:  
+Object.prototype.isPrototypeOf (obj)  
+如果接收者属于obj原型链的一部分，则返回true:   
+var proto={};  
+var obj = object.create(proto);  
+proto.isPrototype0f(obj)   //true  
+obj.isPrototype0f(obj)     //false  
+  
+Object. prototype.hasOwnProperty (key)  
+如果this拥有键为key的属性，则返回true。 “自有”意味着该属性存在于这个对象中，而不存在于该对象的任何原型中。  
+Object.prototype.propertyIsEnumerable (propKey)  
+如果接收者具有键为propKey的可枚举属性,则返回true,否则返回false  
+#### 泛型方法：借用原型方法  
+有时实例原型具有的方法除了对继承自它的对象有用，对很多其他的对象也有用。下面阐述了如何不继承而使用原型的方法。  
+1. 通过字面量访问Object.prototype和Array.prototype  
+2. 调用泛型方法  
+①使用apply()
+②对字符串（不是数组）应用数组方法join()  
+③对字符串应用数组方法map()  
+④对非字符串应用字符串方法  
+⑤对伪数组调用数组方法  
+3. 类似数组的对象和泛型方法  
+（1）①arguments是一个重要的类数组对象，看起来像是一个数组，但不能使用任何数组方法  
+     ②类数组的字符串  
+'abc'[1]       //'b'  
+'abc'.length   //3  
+注：类数组对象的元素必须通过方括号和从0开始的整型索引访问。所有方法需要可读访问，且另外一些方法还需要可写访问。注意所有对象都支持这种索引:方括号中的索引转化为字符串作为键来查找属性的值。  
+var obj={'θ':'abc'};  
+obj[0]     //'abc'  
+类数组对象必须具有length 属性，值是它的元素个数。一些方法需要length是可变的(例如，reverse())。 不变长度的值(例如，字符串)不能使用这些方法。  
+（2）用于类数组对象的模式  
+把类数组对象转化为数组:  
+var arr = Array. prototype. slice .call(arguments );  
+var copy = [ 'a', 'b' ].slice();  
+可以使用简单的for循环来遍历类数组对象中的所有元素:  
+function logArgs() {  
+   for (var i=0; i<arguments .Length; i++) {  
+   console. log(i+'. ' +arguments[i]);  
+   }  
+}  
+但也可以借用Array. prototype . forEach()  
+4. 所有泛型方法列表  
+①Array.prototype（concat、every、filter、forEach、indexOf、join、lastIndexof、map、pop、push、reduce、reduceRight、reverse、shift、slice、some、sort、splice、toLocaleString、toString、unshift）  
+②Date.prototype（toJSON）  
+③String.prototype（charAt、charCodeAt、concat、indexOf、lastIndexOf、localeCompare、match、replace、search、slice、split、substring、toLocaleLowerCase、toLocaleUpperCase、toLowerCase、toUpperCase）  
+#### 缺陷：Object作为Map使用  
+1. 检查一个属性是否存在  
+操作符in检查一个对象是否具有某个给定键的属性，而它也会检查继承的属性，如：  
+'ownProp' in obj     //true  
+我们需要检测可以忽略继承的属性。hasOwnProperty()可以实现，如:  
+obj.has0wnProperty('ownProp')   // true  
+2. 收集属性键  
+for—in方法会检查继承的可枚举属性  
+Object.keys()可以只列出自有属性  
+3. 获取属性值  
+我们可以选择点操作符或方括号操作符来读取属性的值。如果是存储在变量中的任意键，则不能使用点操作符。这样就只剩下方括号操作符，它会查找继承的属性  
+#### 对象的使用  
+（1）对象字面量  
+（2）点运算符（.）  
+（3）中括号运算符（[]）   
+（4）获取和设置原型  
+（5）属性的遍历和检测  
+（6）通过描述符获取和定义属性  
+（7）保护对象  
+（8）所有对象的方法  
 
 
 
